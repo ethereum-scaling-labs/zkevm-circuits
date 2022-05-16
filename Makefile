@@ -15,7 +15,10 @@ fmt: ## Check whether the code is formated correctly
 	@cargo fmt --all -- --check
 
 test: ## Run tests for all the workspace members
+	# Run light tests
 	@cargo test --release --all --all-features --exclude integration-tests --exclude circuit-benchmarks
+	# Run heavy tests serially to avoid OOM
+	@cargo test --release --all --all-features --exclude integration-tests --exclude circuit-benchmarks serial_ -- --ignored --test-threads 1
 
 test_benches: ## Compiles the benchmarks
 	@cargo test --verbose --release --all-features -p circuit-benchmarks --no-run
